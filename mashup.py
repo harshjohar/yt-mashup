@@ -5,20 +5,12 @@ import sys
 import urllib.request
 import re
 
-def mashup():
+def mashup(x, n, y, output_name):
   delete_after_use = True
   print(sys.argv)
-  if len(sys.argv)!=5:
-    print("ERROR: Inputs are not same as the required usage")
-    print("Usage/Input should be in the format: python <program.py> <SingerName> <NumberOfVideos> <AudioDuration> <OutputFileName>")
-    print("Example usage: python 102003725.py 'Arijit Singh' 20 30 102003725-output.mp3")
-    return
-
-  x = sys.argv[1]
   x = x.replace(' ','') + "songs"
-  n = int(sys.argv[2])
-  y = int(sys.argv[3])
-  output_name = sys.argv[4]
+  n = int(n)
+  y = int(y)
 
   url = urllib.request.urlopen('https://www.youtube.com/results?search_query=' + str(x))
 
@@ -46,6 +38,3 @@ def mashup():
   if delete_after_use:
       for i in range(n):
           os.remove("VidtoAudio-"+str(i)+".mp3")
-
-if __name__ == '__main__':
-    mashup()
