@@ -16,17 +16,24 @@ def mashup(x, n, y, output_name):
 
   video = re.findall(r"watch\?v=(\S{11})", url.read().decode())
 
+  success = 0
+  curr = 0
   for i in range(n):
-    yt = YouTube("https://www.youtube.com/watch?v=" + video[i]) 
-    print("Downloading File") 
-    audio = yt.streams.filter(only_audio=True).first().download(filename='VidtoAudio-'+str(i)+'.mp3')
-    print("Download Complete")
-    print("Your mashup will be available soon. Stay tuned...")
+    try:
+      yt = YouTube("https://www.youtube.com/watch?v=" + video[i]) 
+      print("Downloading File") 
+      yt.streams.filter(only_audio=True).first().download(filename='VidtoAudio-'+str(curr)+'.mp3')
+      print(f"Download Complete {curr}")
+      print("Your mashup will be available soon. Stay tuned...")
+      success+=1
+      curr+=1
+    except:
+      print(f"An error occurred while downloading {i} part")
     
 
   if os.path.isfile("VidtoAudio-0.mp3"):
       final = AudioSegment.from_file("VidtoAudio-0.mp3")[0:y*1000]
-  for i in range(1,n):
+  for i in range(1,success):
       aud_file = str(os.getcwd()) + "/VidtoAudio-"+str(i)+".mp3"
       final = final.append(AudioSegment.from_file(aud_file)[0:y*1000],crossfade=1000)
   
@@ -36,5 +43,5 @@ def mashup(x, n, y, output_name):
     
         
   if delete_after_use:
-      for i in range(n):
+      for i in range(success):
           os.remove("VidtoAudio-"+str(i)+".mp3")
