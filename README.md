@@ -23,3 +23,9 @@ conda activate mashup
 ```
 pip install -r requirements.txt
 ```
+
+4. Install additional package for audio editing
+
+```
+conda install ffmpeg
+```
